@@ -2,19 +2,14 @@ import React, { useState } from 'react';
 import {
   ArrowRight,
   Plus,
-  Minus,
-  Sparkles,
-  Layers,
-  ChevronDown,
-  ChevronUp,
 } from 'lucide-react';
 import { ResearchDepth, ResearchSessionSummary } from '../types';
 
 interface Props {
   onStartResearch: (topic: string, instructions: string, depth: ResearchDepth) => Promise<void>;
   isLoading: boolean;
-  recentSessions: ResearchSessionSummary[];
-  onSelectSession: (id: string) => void;
+  recentSessions?: ResearchSessionSummary[];
+  onSelectSession?: (id: string) => void;
 }
 
 const EXAMPLE_PROMPTS = [
@@ -47,8 +42,6 @@ const EXAMPLE_PROMPTS = [
 export const NewResearchDashboard: React.FC<Props> = ({
   onStartResearch,
   isLoading,
-  recentSessions,
-  onSelectSession,
 }) => {
   const [topic, setTopic] = useState('');
   const [instructions, setInstructions] = useState('');
@@ -74,21 +67,21 @@ export const NewResearchDashboard: React.FC<Props> = ({
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12 md:py-16">
-      {/* Clean Header */}
-      <div className="mb-8">
+    <div className="w-full max-w-2xl mx-auto px-4 py-12 md:py-20 flex-1 flex flex-col justify-center">
+      {/* Centered Header */}
+      <div className="text-center mb-8">
         <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-neutral-900 dark:text-white">
           Autonomous Research
         </h1>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+        <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-2 max-w-md mx-auto leading-relaxed">
           Deconstructs your query, investigates live sources, analyzes evidence, and synthesizes a verified report.
         </p>
       </div>
 
-      {/* Main Prompt Card */}
+      {/* Centered Search Box / Main Prompt Card */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white dark:bg-[#141416] border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-sm transition-all focus-within:border-neutral-400 dark:focus-within:border-neutral-600 mb-8"
+        className="w-full bg-white dark:bg-[#141416] border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-xs transition-all focus-within:border-neutral-400 dark:focus-within:border-neutral-600 mb-8"
       >
         {/* Topic Input */}
         <div className="p-4 md:p-5">
@@ -176,54 +169,29 @@ export const NewResearchDashboard: React.FC<Props> = ({
       </form>
 
       {error && (
-        <div className="mb-6 p-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 text-xs text-neutral-800 dark:text-neutral-200">
+        <div className="mb-6 p-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 text-xs text-neutral-800 dark:text-neutral-200 text-center">
           {error}
         </div>
       )}
 
-      {/* Suggested Topics (Minimalist chips) */}
-      <div className="mb-10">
-        <span className="text-[11px] font-medium text-neutral-400 dark:text-neutral-500 uppercase tracking-wider block mb-2.5">
+      {/* Suggested Topics (Centered) */}
+      <div className="flex flex-col items-center">
+        <span className="text-[11px] font-medium text-neutral-400 dark:text-neutral-500 uppercase tracking-wider block mb-2.5 text-center">
           Suggested Topics
         </span>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap justify-center gap-2">
           {EXAMPLE_PROMPTS.map((ex, i) => (
             <button
               key={i}
               type="button"
               onClick={() => handleApplyExample(ex)}
-              className="text-xs py-1.5 px-3 rounded-full border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 bg-white dark:bg-[#141416] text-neutral-700 dark:text-neutral-300 transition-colors text-left"
+              className="text-xs py-1.5 px-3 rounded-full border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 bg-white dark:bg-[#141416] text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white transition-colors"
             >
               {ex.label}
             </button>
           ))}
         </div>
       </div>
-
-      {/* Recent Sessions List */}
-      {recentSessions.length > 0 && (
-        <div>
-          <span className="text-[11px] font-medium text-neutral-400 dark:text-neutral-500 uppercase tracking-wider block mb-2.5">
-            Recent Work
-          </span>
-          <div className="space-y-1.5">
-            {recentSessions.slice(0, 3).map((s) => (
-              <div
-                key={s.id}
-                onClick={() => onSelectSession(s.id)}
-                className="p-3 rounded-lg border border-neutral-200/80 dark:border-neutral-800/80 hover:border-neutral-400 dark:hover:border-neutral-600 bg-white dark:bg-[#141416] cursor-pointer flex items-center justify-between text-xs transition-colors"
-              >
-                <span className="text-neutral-900 dark:text-white font-medium truncate max-w-[80%]">
-                  {s.topic}
-                </span>
-                <span className="text-[10px] text-neutral-400 font-mono capitalize">
-                  {s.status}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

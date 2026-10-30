@@ -42,15 +42,31 @@ export const Sidebar: React.FC<Props> = ({
     s.topic.toLowerCase().includes(filterQuery.toLowerCase())
   );
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return <Check className="w-3.5 h-3.5 text-neutral-400 dark:text-neutral-500 shrink-0" />;
-      case 'failed':
-        return <AlertCircle className="w-3.5 h-3.5 text-neutral-400 shrink-0" />;
-      default:
-        return <Loader2 className="w-3.5 h-3.5 text-neutral-900 dark:text-neutral-100 animate-spin shrink-0" />;
+  const getStatusDisplay = (status: string) => {
+    const norm = (status || '').toLowerCase();
+    if (norm === 'completed') {
+      return {
+        label: 'Completed',
+        dotColor: 'bg-emerald-500',
+        badgeClass: 'text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200/80 dark:border-emerald-800/60',
+        icon: <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />,
+      };
     }
+    if (norm === 'failed' || norm === 'cancelled' || norm === 'canceled') {
+      return {
+        label: 'Cancelled',
+        dotColor: 'bg-rose-500',
+        badgeClass: 'text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/50 border-rose-200/80 dark:border-rose-800/60',
+        icon: <AlertCircle className="w-3.5 h-3.5 text-rose-500 shrink-0" />,
+      };
+    }
+    // In progress (pending, planning, searching, analyzing, generating, etc.)
+    return {
+      label: 'In progress',
+      dotColor: 'bg-amber-500',
+      badgeClass: 'text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/50 border-amber-200/80 dark:border-amber-800/60',
+      icon: <Loader2 className="w-3.5 h-3.5 text-amber-500 animate-spin shrink-0" />,
+    };
   };
 
   const formatDate = (dateStr: string) => {
@@ -130,6 +146,7 @@ export const Sidebar: React.FC<Props> = ({
           ) : (
             filteredSessions.map((s) => {
               const isActive = s.id === activeSessionId;
+              const statusInfo = getStatusDisplay(s.status);
               return (
                 <div
                   key={s.id}
@@ -137,21 +154,26 @@ export const Sidebar: React.FC<Props> = ({
                     onSelectSession(s.id);
                     onCloseMobile();
                   }}
-                  className={`group relative flex items-start gap-2 p-2 rounded-md cursor-pointer text-left text-xs transition-colors ${
+                  className={`group relative flex items-start gap-2.5 p-2.5 rounded-lg cursor-pointer text-left text-xs transition-colors ${
                     isActive
                       ? 'bg-neutral-200/70 dark:bg-neutral-800 text-black dark:text-white font-medium'
                       : 'hover:bg-neutral-100 dark:hover:bg-neutral-800/60 text-neutral-600 dark:text-neutral-400'
                   }`}
                 >
-                  <div className="mt-0.5">{getStatusIcon(s.status)}</div>
+                  <div className="mt-0.5">{statusInfo.icon}</div>
                   <div className="flex-1 min-w-0 pr-5">
-                    <p className="line-clamp-1 leading-snug">
+                    <p className="line-clamp-1 leading-snug font-medium text-neutral-900 dark:text-neutral-100">
                       {s.topic}
                     </p>
-                    <div className="flex items-center gap-1.5 mt-0.5 text-[10px] text-neutral-400 dark:text-neutral-500">
-                      <span>{formatDate(s.created_at)}</span>
-                      <span>•</span>
-                      <span className="capitalize">{s.research_depth}</span>
+                    <div className="flex items-center gap-1.5 mt-1 text-[10px]">
+                      <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded border text-[9px] font-medium leading-none ${statusInfo.badgeClass}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${statusInfo.dotColor} ${statusInfo.label === 'In progress' ? 'animate-pulse' : ''}`} />
+                        {statusInfo.label}
+                      </span>
+                      <span className="text-neutral-400 dark:text-neutral-500">•</span>
+                      <span className="text-neutral-400 dark:text-neutral-500">{formatDate(s.created_at)}</span>
+                      <span className="text-neutral-400 dark:text-neutral-500">•</span>
+                      <span className="text-neutral-400 dark:text-neutral-500 capitalize">{s.research_depth}</span>
                     </div>
                   </div>
 

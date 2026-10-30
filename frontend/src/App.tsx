@@ -241,13 +241,11 @@ export const App: React.FC = () => {
         </header>
 
         {/* View Switcher */}
-        <main className="flex-1">
+        <main className={`flex-1 flex flex-col ${viewMode === 'new' ? 'justify-center' : ''}`}>
           {viewMode === 'new' && (
             <NewResearchDashboard
               onStartResearch={handleStartResearch}
               isLoading={isLoading}
-              recentSessions={sessions}
-              onSelectSession={handleSelectSession}
             />
           )}
 
