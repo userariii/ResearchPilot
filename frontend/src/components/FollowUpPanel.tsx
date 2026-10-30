@@ -81,21 +81,16 @@ export const FollowUpPanel: React.FC<Props> = ({ sessionId, className = '' }) =>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700/60 font-semibold uppercase">
-            Copilot
-          </span>
-          {history.length > 0 && (
-            <button
-              type="button"
-              onClick={() => setHistory([])}
-              className="p-1 text-neutral-400 hover:text-rose-500 dark:hover:text-rose-400 rounded transition-colors"
-              title="Clear conversation"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-            </button>
-          )}
-        </div>
+        {history.length > 0 && (
+          <button
+            type="button"
+            onClick={() => setHistory([])}
+            className="p-1 text-neutral-400 hover:text-rose-500 dark:hover:text-rose-400 rounded transition-colors"
+            title="Clear conversation"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+          </button>
+        )}
       </div>
 
       {/* Chat Messages Stream */}
