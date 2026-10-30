@@ -76,7 +76,10 @@ export const App: React.FC = () => {
     const unsub = subscribeToEvents(
       sessionId,
       (event: LiveAgentEvent) => {
-        setEvents((prev) => [...prev, event]);
+        // Filter out internal handshake events and only record human-readable log messages
+        if (event.type !== 'connected' && event.message) {
+          setEvents((prev) => [...prev, event]);
+        }
 
         if (event.type === 'status_changed' && event.status) {
           setActiveSession((prev) => (prev ? { ...prev, status: event.status as any } : prev));

@@ -45,7 +45,8 @@ export const ResearchProgressView: React.FC<Props> = ({ session, events, onViewR
   const isCompleted = session.status === 'completed';
   const isFailed = session.status === 'failed';
 
-  const lastEvent = events[events.length - 1];
+  const displayEvents = events.filter((e) => e.type !== 'connected' && e.message);
+  const lastEvent = displayEvents[displayEvents.length - 1];
   const activeMessage = lastEvent?.message || 'Agent executing workflow...';
 
   return (
@@ -135,7 +136,7 @@ export const ResearchProgressView: React.FC<Props> = ({ session, events, onViewR
               <span className="truncate">{activeMessage}</span>
             </div>
             <span className="text-[11px] font-mono text-neutral-400 shrink-0">
-              {events.length} events
+              {displayEvents.length} events
             </span>
           </div>
         </div>
@@ -193,16 +194,16 @@ export const ResearchProgressView: React.FC<Props> = ({ session, events, onViewR
 
         {showLog && (
           <div className="p-3.5 font-mono text-[11px] text-neutral-300 space-y-1.5 max-h-56 overflow-y-auto">
-            {events.length === 0 ? (
-              <div className="text-neutral-600">Connecting to stream...</div>
+            {displayEvents.length === 0 ? (
+              <div className="text-neutral-500 italic">Initializing agent workflow...</div>
             ) : (
-              events.map((e, idx) => (
+              displayEvents.map((e, idx) => (
                 <div key={idx} className="flex items-start gap-2 leading-relaxed">
-                  <span className="text-neutral-600 shrink-0 select-none">
-                    {e.timestamp ? new Date(e.timestamp).toLocaleTimeString() : '..:..:..'}
+                  <span className="text-neutral-500 shrink-0 select-none">
+                    {e.timestamp ? new Date(e.timestamp).toLocaleTimeString() : ''}
                   </span>
-                  <span className="text-neutral-500 select-none">›</span>
-                  <span className="text-neutral-200">{e.message || JSON.stringify(e)}</span>
+                  <span className="text-neutral-600 select-none">›</span>
+                  <span className="text-neutral-200">{e.message}</span>
                 </div>
               ))
             )}

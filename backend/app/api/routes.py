@@ -124,8 +124,8 @@ async def stream_research_events(session_id: str, db: Session = Depends(get_db))
 
     async def event_generator():
         try:
-            # Yield initial connect event
-            yield f"data: {json.dumps({'type': 'connected', 'session_id': session_id, 'status': session.status})}\n\n"
+            # Flush initial SSE connection as an SSE keep-alive comment so it doesn't emit raw noise to the user log
+            yield ": connected\n\n"
 
             while True:
                 try:
