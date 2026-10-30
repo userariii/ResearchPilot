@@ -142,6 +142,38 @@ export const ResearchProgressView: React.FC<Props> = ({ session, events, onViewR
         </div>
       </div>
 
+      {/* 2. Live Stream Terminal */}
+      <div className="bg-[#101012] border border-neutral-800 rounded-xl overflow-hidden shadow-sm">
+        <button
+          onClick={() => setShowLog(!showLog)}
+          className="w-full flex items-center justify-between px-4 py-2.5 bg-[#161619] border-b border-neutral-800 text-left"
+        >
+          <span className="text-xs font-mono text-neutral-300 font-medium">
+            Live Stream Log
+          </span>
+          {showLog ? <ChevronUp className="w-3.5 h-3.5 text-neutral-400" /> : <ChevronDown className="w-3.5 h-3.5 text-neutral-400" />}
+        </button>
+
+        {showLog && (
+          <div className="p-3.5 font-mono text-[11px] text-neutral-300 space-y-1.5 max-h-56 overflow-y-auto">
+            {displayEvents.length === 0 ? (
+              <div className="text-neutral-500 italic">Initializing agent workflow...</div>
+            ) : (
+              displayEvents.map((e, idx) => (
+                <div key={idx} className="flex items-start gap-2 leading-relaxed">
+                  <span className="text-neutral-500 shrink-0 select-none">
+                    {e.timestamp ? new Date(e.timestamp).toLocaleTimeString() : ''}
+                  </span>
+                  <span className="text-neutral-600 select-none">›</span>
+                  <span className="text-neutral-200">{e.message}</span>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* 3. Research Plan & Live Sources Discovered */}
       {/* Plan Accordion */}
       {session.research_plan && (
         <div className="bg-white dark:bg-[#141416] border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden shadow-xs">
@@ -179,37 +211,6 @@ export const ResearchProgressView: React.FC<Props> = ({ session, events, onViewR
           )}
         </div>
       )}
-
-      {/* Live Stream Terminal */}
-      <div className="bg-[#101012] border border-neutral-800 rounded-xl overflow-hidden shadow-sm">
-        <button
-          onClick={() => setShowLog(!showLog)}
-          className="w-full flex items-center justify-between px-4 py-2.5 bg-[#161619] border-b border-neutral-800 text-left"
-        >
-          <span className="text-xs font-mono text-neutral-300 font-medium">
-            Live Stream Log
-          </span>
-          {showLog ? <ChevronUp className="w-3.5 h-3.5 text-neutral-400" /> : <ChevronDown className="w-3.5 h-3.5 text-neutral-400" />}
-        </button>
-
-        {showLog && (
-          <div className="p-3.5 font-mono text-[11px] text-neutral-300 space-y-1.5 max-h-56 overflow-y-auto">
-            {displayEvents.length === 0 ? (
-              <div className="text-neutral-500 italic">Initializing agent workflow...</div>
-            ) : (
-              displayEvents.map((e, idx) => (
-                <div key={idx} className="flex items-start gap-2 leading-relaxed">
-                  <span className="text-neutral-500 shrink-0 select-none">
-                    {e.timestamp ? new Date(e.timestamp).toLocaleTimeString() : ''}
-                  </span>
-                  <span className="text-neutral-600 select-none">›</span>
-                  <span className="text-neutral-200">{e.message}</span>
-                </div>
-              ))
-            )}
-          </div>
-        )}
-      </div>
 
       {/* Discovered Sources Summary */}
       {session.sources.length > 0 && (
