@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Download,
   Copy,
@@ -23,6 +23,29 @@ interface Props {
 export const ReportViewer: React.FC<Props> = ({ session }) => {
   const [activeTab, setActiveTab] = useState<'report' | 'sources' | 'followup'>('report');
   const [copied, setCopied] = useState(false);
+
+  // Clean report markdown to prevent UI duplication:
+  // 1) Strip leading H1 title since the research topic is already prominently shown in the header card
+  // 2) Strip any leading horizontal divider immediately following the H1
+  const cleanReport = useMemo(() => {
+    if (!session.report) return '';
+    let text = session.report.trim();
+
+    // Strip leading # Topic line if present
+    if (text.startsWith('# ')) {
+      text = text.replace(/^#\s+[^\n]+(?:\r?\n)*/, '').trim();
+      // Also strip optional leading horizontal divider if present
+      text = text.replace(/^(?:---|—|\*\*\*)\s*(?:\r?\n)*/, '').trim();
+    }
+
+    return text;
+  }, [session.report]);
+
+  // Determine whether the report body already contains an Executive Summary section
+  const hasExecutiveSummaryInReport = useMemo(() => {
+    if (!session.report) return false;
+    return /##\s+(?:\d+\.\s+)?Executive Summary/i.test(session.report);
+  }, [session.report]);
 
   const handleCopyReport = async () => {
     if (!session.report) return;
@@ -164,7 +187,8 @@ export const ReportViewer: React.FC<Props> = ({ session }) => {
           {/* Tab 1: Clean Report Body */}
           {(activeTab === 'report' || activeTab === 'followup') && (
             <div className={activeTab === 'followup' ? 'hidden xl:block space-y-6' : 'space-y-6'}>
-              {session.executive_summary && (
+              {/* Only show separate executive summary card if the report does NOT already include one */}
+              {session.executive_summary && !hasExecutiveSummaryInReport && (
                 <div className="bg-white dark:bg-[#141416] border border-neutral-300 dark:border-neutral-800 rounded-xl p-5 md:p-6 shadow-xs">
                   <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 block mb-1.5">
                     Executive Summary
@@ -176,7 +200,7 @@ export const ReportViewer: React.FC<Props> = ({ session }) => {
               )}
 
               <div className="bg-white dark:bg-[#141416] border border-neutral-300 dark:border-neutral-800 rounded-xl p-6 md:p-10 shadow-xs print:border-none print:p-0">
-                {session.report ? (
+                {cleanReport ? (
                   <div className="markdown-body">
                     <ReactMarkdown
                       remarkPlugins={[remarkGfm]}
@@ -189,7 +213,7 @@ export const ReportViewer: React.FC<Props> = ({ session }) => {
                         ),
                       }}
                     >
-                      {session.report}
+                      {cleanReport}
                     </ReactMarkdown>
                   </div>
                 ) : (
