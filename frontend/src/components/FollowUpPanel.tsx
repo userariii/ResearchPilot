@@ -48,12 +48,12 @@ export const FollowUpPanel: React.FC<Props> = ({ sessionId }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-[#141416] border border-neutral-200 dark:border-neutral-800 rounded-xl p-5 md:p-6 shadow-xs space-y-4">
-      <div className="border-b border-neutral-200/60 dark:border-neutral-800 pb-3">
+    <div className="bg-white dark:bg-[#141416] border border-neutral-300 dark:border-neutral-800 rounded-xl p-5 md:p-6 shadow-xs space-y-4">
+      <div className="border-b border-neutral-200 dark:border-neutral-800 pb-3">
         <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">
           Follow-up Inquiries
         </h3>
-        <p className="text-xs text-neutral-500 mt-0.5">
+        <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-0.5">
           Ask questions grounded in this report and its retrieved sources.
         </p>
       </div>
@@ -64,9 +64,9 @@ export const FollowUpPanel: React.FC<Props> = ({ sessionId }) => {
           {history.map((item, idx) => (
             <div
               key={idx}
-              className="p-3.5 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-[#18181b] space-y-2 text-xs"
+              className="p-3.5 rounded-lg border border-neutral-300/80 dark:border-neutral-800 bg-neutral-50 dark:bg-[#18181b] space-y-2 text-xs"
             >
-              <div className="flex items-center justify-between text-neutral-500">
+              <div className="flex items-center justify-between text-neutral-600 dark:text-neutral-400">
                 <span className="font-semibold text-neutral-900 dark:text-white">
                   Q: {item.question}
                 </span>
@@ -91,7 +91,7 @@ export const FollowUpPanel: React.FC<Props> = ({ sessionId }) => {
             onChange={(e) => setQuestion(e.target.value)}
             disabled={loading}
             placeholder="Ask a clarifying or follow-up question..."
-            className="w-full pl-3.5 pr-10 py-2.5 text-xs bg-neutral-50 dark:bg-[#1a1a1c] border border-neutral-200 dark:border-neutral-800 rounded-lg text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:border-neutral-400 dark:focus:border-neutral-600 disabled:opacity-50 transition-colors"
+            className="w-full pl-3.5 pr-10 py-2.5 text-xs bg-neutral-50 dark:bg-[#1a1a1c] border border-neutral-300 dark:border-neutral-800 rounded-lg text-neutral-900 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-500 focus:outline-none focus:border-neutral-500 dark:focus:border-neutral-500 disabled:opacity-50 transition-colors"
           />
           <button
             type="submit"

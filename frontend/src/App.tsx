@@ -196,17 +196,17 @@ export const App: React.FC = () => {
 
   if (isAppLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0f0f10]">
+      <div className="min-h-screen flex items-center justify-center bg-[#f8f9fa] dark:bg-[#0f0f10]">
         <div className="flex flex-col items-center gap-2.5">
           <Loader2 className="w-5 h-5 animate-spin text-neutral-900 dark:text-white" />
-          <p className="text-xs font-mono text-neutral-400">Loading ResearchPilot...</p>
+          <p className="text-xs font-mono text-neutral-500 dark:text-neutral-400">Loading ResearchPilot...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0f0f10] text-neutral-900 dark:text-neutral-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#0f0f10] text-neutral-900 dark:text-neutral-100 flex flex-col font-sans">
       {/* Sidebar Navigation */}
       <Sidebar
         sessions={sessions}
@@ -223,7 +223,7 @@ export const App: React.FC = () => {
       {/* Main Content Area */}
       <div className="lg:pl-72 flex-1 flex flex-col">
         {/* Mobile Header Bar */}
-        <header className="sticky top-0 z-30 lg:hidden bg-white/90 dark:bg-[#141416]/90 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800 px-4 h-14 flex items-center justify-between">
+        <header className="sticky top-0 z-30 lg:hidden bg-[#f8f9fa]/90 dark:bg-[#141416]/90 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800 px-4 h-14 flex items-center justify-between">
           <button
             onClick={() => setIsMobileOpen(true)}
             className="p-1.5 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md"

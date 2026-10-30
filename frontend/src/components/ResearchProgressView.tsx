@@ -75,15 +75,15 @@ export const ResearchProgressView: React.FC<Props> = ({ session, events, onViewR
   return (
     <div className="max-w-3xl mx-auto px-4 py-10 md:py-14 space-y-6">
       {/* Header Info */}
-      <div className="bg-white dark:bg-[#141416] border border-neutral-200 dark:border-neutral-800 rounded-xl p-6 shadow-sm">
+      <div className="bg-white dark:bg-[#141416] border border-neutral-300 dark:border-neutral-800 rounded-xl p-6 shadow-xs">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-600 dark:text-neutral-400 font-medium">
                 Depth: {session.research_depth}
               </span>
               <span className="text-neutral-300 dark:text-neutral-700">•</span>
-              <span className="text-[10px] font-mono uppercase text-neutral-400">
+              <span className="text-[10px] font-mono uppercase text-neutral-600 dark:text-neutral-400 font-medium">
                 {session.sources.length} sources found
               </span>
             </div>
@@ -91,7 +91,7 @@ export const ResearchProgressView: React.FC<Props> = ({ session, events, onViewR
               {session.topic}
             </h1>
             {session.instructions && (
-              <p className="text-xs text-neutral-500 italic mt-1">
+              <p className="text-xs text-neutral-600 dark:text-neutral-400 italic mt-1 font-normal">
                 {session.instructions}
               </p>
             )}
@@ -99,7 +99,7 @@ export const ResearchProgressView: React.FC<Props> = ({ session, events, onViewR
         </div>
 
         {/* Minimal Progress Stepper */}
-        <div className="mt-8 pt-6 border-t border-neutral-200/60 dark:border-neutral-800">
+        <div className="mt-8 pt-6 border-t border-neutral-200 dark:border-neutral-800">
           <div className="flex items-center justify-between text-xs">
             {STAGES.map((s, idx) => {
               const isPast = idx < currentIndex;
@@ -115,7 +115,7 @@ export const ResearchProgressView: React.FC<Props> = ({ session, events, onViewR
                         ? 'bg-black text-white dark:bg-white dark:text-black ring-4 ring-neutral-200 dark:ring-neutral-800'
                         : isDone
                         ? 'bg-neutral-300 dark:bg-neutral-700 text-black dark:text-white'
-                        : 'border border-neutral-300 dark:border-neutral-700 text-neutral-400'
+                        : 'border border-neutral-400/80 dark:border-neutral-700 text-neutral-500'
                     }`}
                   >
                     {isCurrent ? (
@@ -131,8 +131,8 @@ export const ResearchProgressView: React.FC<Props> = ({ session, events, onViewR
                       isCurrent
                         ? 'font-semibold text-black dark:text-white'
                         : isDone
-                        ? 'text-neutral-700 dark:text-neutral-300'
-                        : 'text-neutral-400'
+                        ? 'text-neutral-800 dark:text-neutral-300 font-medium'
+                        : 'text-neutral-500 dark:text-neutral-400'
                     }`}
                   >
                     {s.label}
@@ -143,12 +143,12 @@ export const ResearchProgressView: React.FC<Props> = ({ session, events, onViewR
           </div>
 
           {/* Current Milestone Status */}
-          <div className="mt-5 p-3 rounded-lg bg-neutral-50 dark:bg-[#1a1a1d] border border-neutral-200/80 dark:border-neutral-800/80 flex items-center justify-between text-xs text-neutral-700 dark:text-neutral-300">
+          <div className="mt-5 p-3 rounded-lg bg-neutral-100/70 dark:bg-[#1a1a1d] border border-neutral-300/80 dark:border-neutral-800/80 flex items-center justify-between text-xs text-neutral-800 dark:text-neutral-200 font-medium">
             <div className="flex items-center gap-2 truncate pr-2">
               <span className="w-1.5 h-1.5 rounded-full bg-black dark:bg-white animate-pulse shrink-0"></span>
               <span className="truncate">{activeMessage}</span>
             </div>
-            <span className="text-[11px] font-mono text-neutral-400 shrink-0">
+            <span className="text-[11px] font-mono text-neutral-500 dark:text-neutral-400 shrink-0">
               {displayEvents.length} events
             </span>
           </div>
@@ -192,7 +192,7 @@ export const ResearchProgressView: React.FC<Props> = ({ session, events, onViewR
 
       {/* Discovered Sources Summary (Collapsed by default, expandable) */}
       {session.sources.length > 0 && (
-        <div className="bg-white dark:bg-[#141416] border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden shadow-xs">
+        <div className="bg-white dark:bg-[#141416] border border-neutral-300 dark:border-neutral-800 rounded-xl overflow-hidden shadow-xs">
           <button
             type="button"
             onClick={() => setShowSources(!showSources)}
@@ -200,28 +200,28 @@ export const ResearchProgressView: React.FC<Props> = ({ session, events, onViewR
           >
             <span>Live Sources Discovered ({session.sources.length})</span>
             {showSources ? (
-              <ChevronUp className="w-3.5 h-3.5 text-neutral-400" />
+              <ChevronUp className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400" />
             ) : (
-              <ChevronDown className="w-3.5 h-3.5 text-neutral-400" />
+              <ChevronDown className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400" />
             )}
           </button>
 
           {showSources && (
-            <div className="p-4 pt-0 border-t border-neutral-200/60 dark:border-neutral-800">
+            <div className="p-4 pt-0 border-t border-neutral-200 dark:border-neutral-800">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-56 overflow-y-auto pr-1 mt-3">
                 {session.sources.map((s, idx) => (
                   <div
                     key={s.id || idx}
-                    className="p-2.5 rounded-lg border border-neutral-200/60 dark:border-neutral-800 bg-neutral-50/50 dark:bg-[#18181b] text-xs flex flex-col justify-between"
+                    className="p-2.5 rounded-lg border border-neutral-300/80 dark:border-neutral-800 bg-neutral-50 dark:bg-[#18181b] text-xs flex flex-col justify-between"
                   >
                     <div>
-                      <div className="flex items-center justify-between text-[10px] text-neutral-400 font-mono mb-1">
+                      <div className="flex items-center justify-between text-[10px] text-neutral-600 dark:text-neutral-400 font-mono mb-1 font-medium">
                         <span className="truncate max-w-[180px]">{s.domain}</span>
                         <a
                           href={s.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-neutral-400 hover:text-black dark:hover:text-white"
+                          className="text-neutral-500 hover:text-black dark:hover:text-white"
                           title="Open source"
                         >
                           <ExternalLink className="w-3 h-3" />

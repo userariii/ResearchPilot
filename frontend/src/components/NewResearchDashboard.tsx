@@ -73,7 +73,7 @@ export const NewResearchDashboard: React.FC<Props> = ({
         <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-neutral-900 dark:text-white">
           Autonomous Research
         </h1>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-2 max-w-md mx-auto leading-relaxed">
+        <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-2 max-w-md mx-auto leading-relaxed">
           Deconstructs your query, investigates live sources, analyzes evidence, and synthesizes a verified report.
         </p>
       </div>
@@ -81,7 +81,7 @@ export const NewResearchDashboard: React.FC<Props> = ({
       {/* Centered Search Box / Main Prompt Card */}
       <form
         onSubmit={handleSubmit}
-        className="w-full bg-white dark:bg-[#141416] border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-xs transition-all focus-within:border-neutral-400 dark:focus-within:border-neutral-600 mb-8"
+        className="w-full bg-white dark:bg-[#141416] border border-neutral-300 dark:border-neutral-800 rounded-xl shadow-xs transition-all focus-within:border-neutral-500 dark:focus-within:border-neutral-500 mb-8"
       >
         {/* Topic Input */}
         <div className="p-4 md:p-5">
@@ -94,14 +94,14 @@ export const NewResearchDashboard: React.FC<Props> = ({
               if (error) setError(null);
             }}
             placeholder="Enter research topic, question, or technology to investigate..."
-            className="w-full bg-transparent text-sm md:text-[15px] text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none resize-none leading-relaxed"
+            className="w-full bg-transparent text-sm md:text-[15px] text-neutral-900 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-500 focus:outline-none resize-none leading-relaxed"
           />
 
           {/* Optional instructions expander */}
           {showInstructions ? (
-            <div className="pt-3 mt-3 border-t border-neutral-200/60 dark:border-neutral-800">
+            <div className="pt-3 mt-3 border-t border-neutral-200 dark:border-neutral-800">
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
+                <span className="text-xs font-medium text-neutral-700 dark:text-neutral-300">
                   Focus angles or constraints
                 </span>
                 <button
@@ -110,7 +110,7 @@ export const NewResearchDashboard: React.FC<Props> = ({
                     setShowInstructions(false);
                     setInstructions('');
                   }}
-                  className="text-xs text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"
+                  className="text-xs text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200 font-medium"
                 >
                   Remove
                 </button>
@@ -121,14 +121,14 @@ export const NewResearchDashboard: React.FC<Props> = ({
                 maxLength={2000}
                 onChange={(e) => setInstructions(e.target.value)}
                 placeholder="e.g. Compare VRAM requirements, emphasize licensing trade-offs, highlight empirical benchmarks..."
-                className="w-full bg-neutral-50 dark:bg-[#1a1a1c] border border-neutral-200 dark:border-neutral-800 rounded-lg p-2.5 text-xs text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:border-neutral-400 dark:focus:border-neutral-600 resize-none"
+                className="w-full bg-neutral-50 dark:bg-[#1a1a1c] border border-neutral-300 dark:border-neutral-800 rounded-lg p-2.5 text-xs text-neutral-900 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-500 focus:outline-none focus:border-neutral-500 dark:focus:border-neutral-500 resize-none"
               />
             </div>
           ) : (
             <button
               type="button"
               onClick={() => setShowInstructions(true)}
-              className="text-xs text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white flex items-center gap-1 mt-1 transition-colors"
+              className="text-xs text-neutral-600 hover:text-black dark:text-neutral-400 dark:hover:text-white flex items-center gap-1 mt-1 font-medium transition-colors"
             >
               <Plus className="w-3 h-3" />
               <span>Add specific instructions or focus angles</span>
@@ -137,9 +137,9 @@ export const NewResearchDashboard: React.FC<Props> = ({
         </div>
 
         {/* Toolbar Footer */}
-        <div className="px-4 py-3 bg-[#fafafa] dark:bg-[#18181b] border-t border-neutral-200/80 dark:border-neutral-800/80 rounded-b-xl flex flex-wrap items-center justify-between gap-3">
+        <div className="px-4 py-3 bg-[#f4f5f6] dark:bg-[#18181b] border-t border-neutral-200 dark:border-neutral-800 rounded-b-xl flex flex-wrap items-center justify-between gap-3">
           {/* Depth Segmented Control */}
-          <div className="flex items-center bg-neutral-200/70 dark:bg-neutral-800 p-0.5 rounded-lg text-xs">
+          <div className="flex items-center bg-neutral-200/80 dark:bg-neutral-800 p-0.5 rounded-lg text-xs">
             {(['quick', 'standard', 'deep'] as ResearchDepth[]).map((d) => (
               <button
                 key={d}
@@ -147,8 +147,8 @@ export const NewResearchDashboard: React.FC<Props> = ({
                 onClick={() => setDepth(d)}
                 className={`px-3 py-1 rounded-md capitalize font-medium transition-all ${
                   depth === d
-                    ? 'bg-white text-black dark:bg-[#202023] dark:text-white shadow-xs'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white'
+                    ? 'bg-white text-black dark:bg-[#202023] dark:text-white shadow-xs font-semibold'
+                    : 'text-neutral-700 dark:text-neutral-400 hover:text-black dark:hover:text-white'
                 }`}
               >
                 {d}
@@ -169,14 +169,14 @@ export const NewResearchDashboard: React.FC<Props> = ({
       </form>
 
       {error && (
-        <div className="mb-6 p-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 text-xs text-neutral-800 dark:text-neutral-200 text-center">
+        <div className="mb-6 p-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 text-xs text-neutral-800 dark:text-neutral-200 text-center font-medium">
           {error}
         </div>
       )}
 
       {/* Suggested Topics (Centered) */}
       <div className="flex flex-col items-center">
-        <span className="text-[11px] font-medium text-neutral-400 dark:text-neutral-500 uppercase tracking-wider block mb-2.5 text-center">
+        <span className="text-[11px] font-semibold text-neutral-600 dark:text-neutral-400 uppercase tracking-wider block mb-2.5 text-center">
           Suggested Topics
         </span>
         <div className="flex flex-wrap justify-center gap-2">
@@ -185,7 +185,7 @@ export const NewResearchDashboard: React.FC<Props> = ({
               key={i}
               type="button"
               onClick={() => handleApplyExample(ex)}
-              className="text-xs py-1.5 px-3 rounded-full border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 bg-white dark:bg-[#141416] text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white transition-colors"
+              className="text-xs py-1.5 px-3 rounded-full border border-neutral-300 dark:border-neutral-800 hover:border-neutral-500 dark:hover:border-neutral-600 bg-white dark:bg-[#141416] text-neutral-800 dark:text-neutral-300 hover:text-black dark:hover:text-white shadow-xs font-medium transition-colors"
             >
               {ex.label}
             </button>
