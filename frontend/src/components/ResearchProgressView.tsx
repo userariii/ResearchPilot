@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Check,
   Loader2,
@@ -27,7 +27,8 @@ const STAGES = [
 
 export const ResearchProgressView: React.FC<Props> = ({ session, events, onViewReport }) => {
   const [showLog, setShowLog] = useState(true);
-  const [showPlan, setShowPlan] = useState(false);
+  const logContainerRef = useRef<HTMLDivElement>(null);
+  const isAutoScrollEnabledRef = useRef<boolean>(true);
 
   const getStageIndex = (status: string) => {
     switch (status) {
@@ -48,6 +49,21 @@ export const ResearchProgressView: React.FC<Props> = ({ session, events, onViewR
   const displayEvents = events.filter((e) => e.type !== 'connected' && e.message);
   const lastEvent = displayEvents[displayEvents.length - 1];
   const activeMessage = lastEvent?.message || 'Agent executing workflow...';
+
+  // Auto-scroll log to latest message unless user scrolls up
+  useEffect(() => {
+    if (isAutoScrollEnabledRef.current && logContainerRef.current) {
+      logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
+    }
+  }, [displayEvents.length, showLog]);
+
+  const handleLogScroll = () => {
+    if (!logContainerRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = logContainerRef.current;
+    // If user is within 30px of the bottom, keep auto-scroll active
+    const isAtBottom = scrollHeight - scrollTop - clientHeight < 30;
+    isAutoScrollEnabledRef.current = isAtBottom;
+  };
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10 md:py-14 space-y-6">
@@ -155,7 +171,11 @@ export const ResearchProgressView: React.FC<Props> = ({ session, events, onViewR
         </button>
 
         {showLog && (
-          <div className="p-3.5 font-mono text-[11px] text-neutral-300 space-y-1.5 max-h-56 overflow-y-auto">
+          <div
+            ref={logContainerRef}
+            onScroll={handleLogScroll}
+            className="p-3.5 font-mono text-[11px] text-neutral-300 space-y-1.5 max-h-56 overflow-y-auto"
+          >
             {displayEvents.length === 0 ? (
               <div className="text-neutral-500 italic">Initializing agent workflow...</div>
             ) : (
@@ -172,45 +192,6 @@ export const ResearchProgressView: React.FC<Props> = ({ session, events, onViewR
           </div>
         )}
       </div>
-
-      {/* 3. Research Plan & Live Sources Discovered */}
-      {/* Plan Accordion */}
-      {session.research_plan && (
-        <div className="bg-white dark:bg-[#141416] border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden shadow-xs">
-          <button
-            onClick={() => setShowPlan(!showPlan)}
-            className="w-full flex items-center justify-between p-4 text-left text-xs font-semibold text-neutral-800 dark:text-neutral-200"
-          >
-            <span>Research Plan ({session.research_plan.research_questions.length} Questions)</span>
-            {showPlan ? <ChevronUp className="w-4 h-4 text-neutral-400" /> : <ChevronDown className="w-4 h-4 text-neutral-400" />}
-          </button>
-
-          {showPlan && (
-            <div className="p-4 pt-0 space-y-2.5 border-t border-neutral-200/60 dark:border-neutral-800 text-xs">
-              {session.research_plan.research_questions.map((q, idx) => (
-                <div
-                  key={idx}
-                  className="p-3 rounded-lg border border-neutral-200/60 dark:border-neutral-800 bg-neutral-50/60 dark:bg-[#18181b] space-y-1.5"
-                >
-                  <p className="font-medium text-neutral-900 dark:text-white">
-                    {idx + 1}. {q.question}
-                  </p>
-                  <div className="flex flex-wrap gap-1">
-                    {q.search_queries.map((sq, sqIdx) => (
-                      <span
-                        key={sqIdx}
-                        className="px-2 py-0.5 rounded bg-white dark:bg-[#202023] border border-neutral-200 dark:border-neutral-700 font-mono text-[10px] text-neutral-600 dark:text-neutral-400"
-                      >
-                        {sq}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
 
       {/* Discovered Sources Summary */}
       {session.sources.length > 0 && (
