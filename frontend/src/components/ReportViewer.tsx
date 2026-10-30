@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import {
-  Download,
   Copy,
   Check,
   Printer,
@@ -14,7 +13,6 @@ import remarkGfm from 'remark-gfm';
 import { ResearchSession } from '../types';
 import { SourceExplorer } from './SourceExplorer';
 import { FollowUpPanel } from './FollowUpPanel';
-import { getExportUrl } from '../api/client';
 
 interface Props {
   session: ResearchSession;
@@ -122,16 +120,6 @@ export const ReportViewer: React.FC<Props> = ({ session }) => {
                     </>
                   )}
                 </button>
-
-                <a
-                  href={getExportUrl(session.id)}
-                  download
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition-opacity"
-                  title="Download standalone Markdown file"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>Export .MD</span>
-                </a>
 
                 <button
                   onClick={handlePrint}
