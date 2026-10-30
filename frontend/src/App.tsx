@@ -218,7 +218,7 @@ export const App: React.FC = () => {
       />
 
       {/* Main Content Area */}
-      <div className="lg:pl-64 flex-1 flex flex-col">
+      <div className="lg:pl-72 flex-1 flex flex-col">
         {/* Mobile Header Bar */}
         <header className="sticky top-0 z-30 lg:hidden bg-white/90 dark:bg-[#141416]/90 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800 px-4 h-14 flex items-center justify-between">
           <button

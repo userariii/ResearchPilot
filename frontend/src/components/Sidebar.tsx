@@ -62,7 +62,7 @@ export const Sidebar: React.FC<Props> = ({
     }
     // In progress (pending, planning, searching, analyzing, generating, etc.)
     return {
-      label: 'In progress',
+      label: 'In Progress',
       dotColor: 'bg-amber-500',
       badgeClass: 'text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/50 border-amber-200/80 dark:border-amber-800/60',
       icon: <Loader2 className="w-3.5 h-3.5 text-amber-500 animate-spin shrink-0" />,
@@ -88,7 +88,7 @@ export const Sidebar: React.FC<Props> = ({
       )}
 
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-40 w-64 bg-[#fbfbfb] dark:bg-[#141416] border-r border-neutral-200 dark:border-neutral-800/80 flex flex-col transition-transform duration-200 ease-in-out lg:translate-x-0 ${
+        className={`fixed top-0 bottom-0 left-0 z-40 w-72 bg-[#fbfbfb] dark:bg-[#141416] border-r border-neutral-200 dark:border-neutral-800/80 flex flex-col transition-transform duration-200 ease-in-out lg:translate-x-0 ${
           isMobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -165,15 +165,15 @@ export const Sidebar: React.FC<Props> = ({
                     <p className="line-clamp-1 leading-snug font-medium text-neutral-900 dark:text-neutral-100">
                       {s.topic}
                     </p>
-                    <div className="flex items-center gap-1.5 mt-1 text-[10px]">
-                      <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded border text-[9px] font-medium leading-none ${statusInfo.badgeClass}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${statusInfo.dotColor} ${statusInfo.label === 'In progress' ? 'animate-pulse' : ''}`} />
-                        {statusInfo.label}
+                    <div className="flex items-center gap-1.5 mt-1 text-[10px] whitespace-nowrap overflow-hidden">
+                      <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded border text-[9px] font-medium leading-none shrink-0 whitespace-nowrap ${statusInfo.badgeClass}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${statusInfo.dotColor} ${statusInfo.label === 'In Progress' ? 'animate-pulse' : ''}`} />
+                        <span className="whitespace-nowrap">{statusInfo.label}</span>
                       </span>
-                      <span className="text-neutral-400 dark:text-neutral-500">•</span>
-                      <span className="text-neutral-400 dark:text-neutral-500">{formatDate(s.created_at)}</span>
-                      <span className="text-neutral-400 dark:text-neutral-500">•</span>
-                      <span className="text-neutral-400 dark:text-neutral-500 capitalize">{s.research_depth}</span>
+                      <span className="text-neutral-300 dark:text-neutral-600 shrink-0 select-none">•</span>
+                      <span className="text-neutral-400 dark:text-neutral-500 shrink-0 whitespace-nowrap">{formatDate(s.created_at)}</span>
+                      <span className="text-neutral-300 dark:text-neutral-600 shrink-0 select-none">•</span>
+                      <span className="text-neutral-400 dark:text-neutral-500 capitalize shrink-0 whitespace-nowrap">{s.research_depth}</span>
                     </div>
                   </div>
 
