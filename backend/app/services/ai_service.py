@@ -71,25 +71,45 @@ class BaseAIService(abc.ABC):
 
 
 class GeminiAIService(BaseAIService):
-    def __init__(self, api_key: str, model_name: str = "gemini-2.5-flash"):
+    def __init__(self, api_key: str, model_name: str = "gemini-3.5-flash"):
         self.api_key = api_key
-        self.model_name = model_name
+        self.model_name = model_name or "gemini-3.5-flash"
         from google import genai
-        self.client = genai.Client(api_key=api_key)
+        from google.genai import types
+        self.client = genai.Client(
+            api_key=api_key,
+            http_options=types.HttpOptions(timeout=30000)
+        )
 
     async def _generate(self, prompt: str, system_instruction: str = "") -> str:
         import asyncio
         loop = asyncio.get_running_loop()
         full_prompt = f"{system_instruction}\n\n{prompt}" if system_instruction else prompt
-        
-        response = await loop.run_in_executor(
-            None,
-            lambda: self.client.models.generate_content(
-                model=self.model_name,
-                contents=full_prompt,
-            )
-        )
-        return response.text or ""
+
+        # Support cascade of models in case of version transitions or load spikes
+        models_to_try = [self.model_name]
+        for m in ["gemini-3.5-flash", "gemini-3.8-flash", "gemini-3.1-flash-lite"]:
+            if m not in models_to_try:
+                models_to_try.append(m)
+
+        last_error = None
+        for m in models_to_try:
+            try:
+                response = await loop.run_in_executor(
+                    None,
+                    lambda model_name=m: self.client.models.generate_content(
+                        model=model_name,
+                        contents=full_prompt,
+                    )
+                )
+                if response and response.text:
+                    self.model_name = m  # Remember working model
+                    return response.text
+            except Exception as e:
+                logger.warning(f"Gemini call with model '{m}' failed: {e}")
+                last_error = e
+
+        raise last_error or RuntimeError("Gemini failed on all candidate models")
 
     async def generate_plan(
         self, topic: str, instructions: Optional[str], depth: str

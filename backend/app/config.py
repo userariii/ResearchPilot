@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     # AI Configuration
     AI_PROVIDER: str = "auto"  # 'gemini', 'openai', 'mock', or 'auto'
     GEMINI_API_KEY: Optional[str] = None
-    GEMINI_MODEL: str = "gemini-2.5-flash"
+    GEMINI_MODEL: str = "gemini-3.5-flash"
     OPENAI_API_KEY: Optional[str] = None
     OPENAI_MODEL: str = "gpt-4o-mini"
     OPENAI_BASE_URL: Optional[str] = None

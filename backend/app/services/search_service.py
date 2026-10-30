@@ -57,7 +57,6 @@ class TavilySearchService(BaseSearchService):
     async def search(self, query: str, max_results: int = 5) -> List[Dict[str, Any]]:
         try:
             import asyncio
-            # Tavily client is synchronous, run in executor to prevent blocking asyncio loop
             loop = asyncio.get_running_loop()
             response = await loop.run_in_executor(
                 None,
@@ -91,6 +90,58 @@ class TavilySearchService(BaseSearchService):
         except Exception as e:
             logger.error(f"Tavily search failed for query '{query}': {e}")
             raise RuntimeError(f"Search API error: {str(e)}")
+
+
+class DuckDuckGoSearchService(BaseSearchService):
+    """
+    Live public web search service that queries DuckDuckGo HTML endpoint without requiring an API key.
+    Provides live internet search results as a fallback when Tavily API key is not supplied.
+    """
+
+    async def search(self, query: str, max_results: int = 5) -> List[Dict[str, Any]]:
+        import httpx
+        from urllib.parse import unquote, urlparse
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5",
+        }
+        url = "https://html.duckduckgo.com/html/"
+        data = {"q": query, "b": ""}
+
+        async with httpx.AsyncClient(timeout=10.0, follow_redirects=True) as client:
+            resp = await client.post(url, data=data, headers=headers)
+            if resp.status_code != 200:
+                raise RuntimeError(f"DuckDuckGo search returned status {resp.status_code}")
+
+            pattern = r'<h2[^>]*class=[\'\"]result__title[\'\"][^>]*>[\s\S]*?<a[^>]*href=[\'\"]([^\'\"]+)[\'\"][^>]*>([\s\S]*?)<\/a>[\s\S]*?<a[^>]*class=[\'\"]result__snippet[\'\"][^>]*>([\s\S]*?)<\/a>'
+            matches = re.findall(pattern, resp.text)
+
+            results = []
+            for raw_url, raw_title, raw_snippet in matches[:max_results]:
+                # Extract clean actual URL
+                if "uddg=" in raw_url:
+                    actual_url = unquote(raw_url.split("uddg=")[1].split("&")[0])
+                else:
+                    actual_url = raw_url
+
+                title = clean_untrusted_content(re.sub(r"<[^>]+>", "", raw_title).strip(), 200)
+                snippet = clean_untrusted_content(re.sub(r"<[^>]+>", "", raw_snippet).strip(), 1000)
+                domain = urlparse(actual_url).netloc.replace("www.", "") or "web"
+
+                if actual_url.startswith("http") and title and snippet:
+                    results.append({
+                        "title": title,
+                        "url": actual_url,
+                        "domain": domain,
+                        "snippet": snippet,
+                        "extracted_content": snippet,
+                        "query": query
+                    })
+
+            if not results:
+                raise RuntimeError("No parsed results from DuckDuckGo HTML")
+            return results
 
 
 class MockSearchService(BaseSearchService):
@@ -159,7 +210,11 @@ def get_search_service() -> BaseSearchService:
         try:
             return TavilySearchService(api_key=settings.TAVILY_API_KEY)
         except Exception as e:
-            logger.warning(f"Failed to initialize TavilySearchService: {e}. Falling back to MockSearchService.")
-            return MockSearchService()
-    return MockSearchService()
+            logger.warning(f"Failed to initialize TavilySearchService: {e}. Falling back to DuckDuckGo/Mock.")
+
+    # Try DuckDuckGo live web search
+    try:
+        return DuckDuckGoSearchService()
+    except Exception:
+        return MockSearchService()
 

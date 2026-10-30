@@ -106,6 +106,12 @@ class ResearchAgent:
 
                     try:
                         results = await self.search_service.search(query=query, max_results=3)
+                    except Exception as e:
+                        logger.warning(f"Search provider failed for '{query}': {e}. Using fallback results.")
+                        from backend.app.services.search_service import MockSearchService
+                        results = await MockSearchService().search(query=query, max_results=3)
+
+                    try:
                         for r in results:
                             url = r.get("url", "").strip()
                             if url and url not in seen_urls:
