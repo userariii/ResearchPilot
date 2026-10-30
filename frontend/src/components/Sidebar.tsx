@@ -161,7 +161,7 @@ export const Sidebar: React.FC<Props> = ({
                   }`}
                 >
                   <div className="mt-0.5">{statusInfo.icon}</div>
-                  <div className="flex-1 min-w-0 pr-6">
+                  <div className="flex-1 min-w-0 pr-7">
                     <p className="line-clamp-1 leading-snug font-medium text-neutral-900 dark:text-neutral-100">
                       {s.topic}
                     </p>
@@ -179,7 +179,7 @@ export const Sidebar: React.FC<Props> = ({
 
                   <button
                     onClick={(e) => onDeleteSession(s.id, e)}
-                    className="absolute right-2 top-2 p-1 rounded-md text-neutral-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-neutral-200/60 dark:hover:bg-neutral-700/60 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-md text-neutral-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-neutral-200/60 dark:hover:bg-neutral-700/60 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center"
                     title="Delete session"
                     aria-label="Delete session"
                   >
