@@ -1,0 +1,14 @@
+{
+  "name": "researchpilot-worker",
+  "version": "1.0.0",
+  "description": "ResearchPilot Cloudflare Worker Backend",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test test/worker.test.mjs"
+  },
+  "keywords": ["cloudflare", "workers", "ai", "research-agent"],
+  "author": "",
+  "license": "Apache-2.0"
+}

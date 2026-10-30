@@ -6,7 +6,8 @@ import {
   LiveAgentEvent,
 } from '../types';
 
-const API_BASE = '/api';
+const rawBase = (import.meta.env.VITE_API_BASE || '/api').trim().replace(/\/+$/, '');
+const API_BASE = rawBase.endsWith('/api') ? rawBase : `${rawBase}/api`;
 
 export async function createResearch(payload: {
   topic: string;

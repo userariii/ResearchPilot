@@ -1,0 +1,46 @@
+{
+  "name": "researchpilot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Autonomous AI Research Agent compatible with Cloudflare Workers & Pages",
+  "workspaces": [
+    "frontend",
+    "worker"
+  ],
+  "scripts": {
+    "build": "npm run build:frontend",
+    "build:frontend": "cd frontend && (if [ ! -f node_modules/.bin/tsc ]; then npm install; fi) && npm run build && cd .. && rm -rf dist && cp -r frontend/dist dist",
+    "build:worker": "tsc --project worker/tsconfig.json --noEmit false --outDir worker/dist",
+    "build:all": "npm run build:frontend && npm run build:worker",
+    "deploy:worker": "wrangler deploy",
+    "deploy:pages": "wrangler pages deploy dist",
+    "d1:create": "wrangler d1 create research-pilot-db",
+    "d1:init:local": "wrangler d1 execute research-pilot-db --local --file=./worker/schema.sql",
+    "d1:init:remote": "wrangler d1 execute research-pilot-db --remote --file=./worker/schema.sql",
+    "test:worker": "npm run build:worker && node --test worker/test/worker.test.mjs && node --test worker/test/d1.test.mjs"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.16.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0",
+    "tailwind-merge": "^2.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.8.1",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "wrangler": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

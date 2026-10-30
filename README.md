@@ -248,6 +248,34 @@ PYTHONPATH=. ./venv/bin/pytest -v tests/test_backend.py
 
 ---
 
+## Cloudflare Workers & Pages Deployment
+
+ResearchPilot is fully compatible with deployment on Cloudflare's Edge Network:
+- **Frontend:** Cloudflare Pages (React + Vite SPA with automatic SPA routing)
+- **Backend:** Cloudflare Workers (TypeScript API with Server-Sent Events streaming & `ctx.waitUntil` background agent loop)
+- **Database:** Cloudflare D1 (Serverless edge SQLite)
+
+For full step-by-step instructions, see [CLOUDFLARE_DEPLOYMENT.md](CLOUDFLARE_DEPLOYMENT.md).
+
+Quick setup summary:
+```bash
+# 1. Create D1 database
+npx wrangler d1 create research-pilot-db
+
+# 2. Apply database schema
+npx wrangler d1 execute research-pilot-db --remote --file=./worker/schema.sql
+
+# 3. Deploy Worker API
+npx wrangler deploy
+
+# 4. Build and deploy frontend to Cloudflare Pages
+cd frontend
+VITE_API_BASE="https://researchpilot-api.<your-subdomain>.workers.dev" npm run build
+npx wrangler pages deploy dist --project-name=researchpilot
+```
+
+---
+
 ## License
 MIT License. Built for the AI Automation Intern Technical Assessment.
 
