@@ -63,7 +63,14 @@ export class ResearchAgent {
       const collectedSources: SearchResultItem[] = [];
       const seenUrls = new Set<string>();
 
+      // Target source count to avoid exceeding edge execution time limits
+      const targetSources = research_depth === 'quick' ? 6 : research_depth === 'standard' ? 10 : 14;
+
       for (let idx = 0; idx < researchQuestions.length; idx++) {
+        if (collectedSources.length >= targetSources) {
+          break; // Sufficient evidence gathered; proceed immediately to synthesis!
+        }
+
         const qItem = researchQuestions[idx];
         const questionText = qItem.question || '';
         const queries = qItem.search_queries?.length > 0 ? qItem.search_queries : [questionText];
@@ -76,8 +83,12 @@ export class ResearchAgent {
           total_questions: researchQuestions.length,
         });
 
-        // Limit to top 2 queries per question to avoid quota exhaustion
-        for (const query of queries.slice(0, 2)) {
+        // Run primary query (and secondary only if more sources are still needed)
+        const queriesToRun = queries.slice(0, collectedSources.length < targetSources / 2 ? 2 : 1);
+
+        for (const query of queriesToRun) {
+          if (collectedSources.length >= targetSources) break;
+
           await publishEvent(env, sessionId, 'query_executing', {
             message: `Querying search provider for: '${query}'`,
             query,

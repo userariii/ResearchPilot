@@ -113,7 +113,41 @@ export const App: React.FC = () => {
       }
     );
 
-    unsubscribeRef.current = unsub;
+    // Periodic fallback polling to sync state in case SSE connection drops or is buffered
+    const pollInterval = setInterval(() => {
+      getResearch(sessionId)
+        .then((full) => {
+          if (!full) return;
+          if (full.status === 'completed' && full.report) {
+            setActiveSession(full);
+            refreshHistory();
+            setViewMode('report');
+            clearInterval(pollInterval);
+          } else if (full.status === 'failed') {
+            setActiveSession(full);
+            refreshHistory();
+            clearInterval(pollInterval);
+          } else {
+            setActiveSession((prev) =>
+              prev
+                ? {
+                    ...prev,
+                    status: full.status,
+                    report: full.report || prev.report,
+                    research_plan: full.research_plan || prev.research_plan,
+                    sources: full.sources?.length ? full.sources : prev.sources,
+                  }
+                : full
+            );
+          }
+        })
+        .catch(() => {});
+    }, 3000);
+
+    unsubscribeRef.current = () => {
+      unsub();
+      clearInterval(pollInterval);
+    };
   }, [cleanupSubscription, refreshHistory]);
 
   // Handle selecting a session

@@ -34,10 +34,11 @@ export class TavilySearchService implements BaseSearchService {
       headers: {
         'Content-Type': 'application/json',
       },
+      signal: AbortSignal.timeout(6000),
       body: JSON.stringify({
         api_key: this.apiKey,
         query,
-        search_depth: 'advanced',
+        search_depth: 'basic',
         max_results: maxResults,
         include_answer: false,
         include_raw_content: false,
@@ -87,6 +88,7 @@ export class DuckDuckGoSearchService implements BaseSearchService {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         'Content-Type': 'application/x-www-form-urlencoded',
       },
+      signal: AbortSignal.timeout(5000),
       body: `q=${encodeURIComponent(query)}&b=`,
     });
 

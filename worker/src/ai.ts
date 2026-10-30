@@ -73,6 +73,7 @@ export class GeminiAIService implements BaseAIService {
         const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          signal: AbortSignal.timeout(12000),
           body: JSON.stringify({
             contents: [{ parts: [{ text: fullPrompt }] }],
           }),
@@ -264,6 +265,7 @@ export class OpenAIAIService implements BaseAIService {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.apiKey}`,
       },
+      signal: AbortSignal.timeout(12000),
       body: JSON.stringify({
         model: this.modelName,
         messages: [
