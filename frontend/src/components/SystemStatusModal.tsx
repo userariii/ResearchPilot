@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Server, Cpu, Search, Database, CheckCircle2, AlertCircle, Key } from 'lucide-react';
+import { X, Server, Check, AlertCircle } from 'lucide-react';
 import { SystemStatus } from '../types';
 
 interface Props {
@@ -13,123 +13,102 @@ export const SystemStatusModal: React.FC<Props> = ({ isOpen, onClose, status, on
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+      <div className="bg-white dark:bg-[#141416] border border-neutral-200 dark:border-neutral-800 rounded-xl w-full max-w-md shadow-xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 rounded-xl">
-              <Server className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-slate-900 dark:text-white text-base">System Architecture & Providers</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Environment status & provider abstractions</p>
-            </div>
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-neutral-200/80 dark:border-neutral-800/80">
+          <div className="flex items-center gap-2">
+            <Server className="w-4 h-4 text-neutral-500" />
+            <h3 className="font-semibold text-neutral-900 dark:text-white text-xs tracking-tight">
+              System Configuration & Models
+            </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-1 text-neutral-400 hover:text-black dark:hover:text-white rounded transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Body */}
-        <div className="p-6 space-y-4">
+        <div className="p-5 space-y-3.5 text-xs">
           {status ? (
             <>
               {/* AI Engine Status */}
-              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <Cpu className="w-4 h-4 text-brand-500" />
-                    <span className="text-sm font-medium text-slate-900 dark:text-slate-100">AI Intelligence Provider</span>
-                  </div>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider bg-brand-100 text-brand-800 dark:bg-brand-950 dark:text-brand-300">
+              <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-[#fafafa] dark:bg-[#18181b] space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-medium text-neutral-700 dark:text-neutral-300">AI Intelligence Provider</span>
+                  <span className="font-mono text-[11px] font-semibold uppercase px-2 py-0.5 rounded bg-neutral-200/70 dark:bg-neutral-800 text-neutral-900 dark:text-white">
                     {status.ai_provider}
                   </span>
                 </div>
-                <div className="grid grid-cols-2 gap-2 text-xs mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-700/60">
-                  <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
+                <div className="grid grid-cols-2 gap-2 text-[11px] text-neutral-500 pt-2 border-t border-neutral-200/60 dark:border-neutral-800">
+                  <div className="flex items-center gap-1.5">
                     {status.gemini_configured ? (
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                      <Check className="w-3 h-3 text-neutral-900 dark:text-white" />
                     ) : (
-                      <AlertCircle className="w-3.5 h-3.5 text-slate-400" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
                     )}
-                    <span>Gemini API: {status.gemini_configured ? 'Active' : 'Unset'}</span>
+                    <span>Gemini: {status.gemini_configured ? 'Active' : 'Unset'}</span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
+                  <div className="flex items-center gap-1.5">
                     {status.openai_configured ? (
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                      <Check className="w-3 h-3 text-neutral-900 dark:text-white" />
                     ) : (
-                      <AlertCircle className="w-3.5 h-3.5 text-slate-400" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
                     )}
-                    <span>OpenAI API: {status.openai_configured ? 'Active' : 'Unset'}</span>
+                    <span>OpenAI: {status.openai_configured ? 'Active' : 'Unset'}</span>
                   </div>
                 </div>
               </div>
 
               {/* Search Engine Status */}
-              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <Search className="w-4 h-4 text-emerald-500" />
-                    <span className="text-sm font-medium text-slate-900 dark:text-slate-100">Web Search Provider</span>
-                  </div>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-                    {status.search_provider}
+              <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-[#fafafa] dark:bg-[#18181b] flex items-center justify-between">
+                <div>
+                  <span className="font-medium text-neutral-700 dark:text-neutral-300 block">Web Search Provider</span>
+                  <span className="text-[11px] text-neutral-500 mt-0.5 block">
+                    {status.tavily_configured ? 'Tavily Search API' : 'Fallback / Mock Search'}
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400 mt-2">
-                  {status.tavily_configured ? (
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                  ) : (
-                    <AlertCircle className="w-3.5 h-3.5 text-slate-400" />
-                  )}
-                  <span>Tavily Search: {status.tavily_configured ? 'Configured & Active' : 'Fallback / Mock Mode Active'}</span>
-                </div>
+                <span className="font-mono text-[11px] font-semibold uppercase px-2 py-0.5 rounded bg-neutral-200/70 dark:bg-neutral-800 text-neutral-900 dark:text-white">
+                  {status.search_provider}
+                </span>
               </div>
 
-              {/* Database Status */}
-              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Database className="w-4 h-4 text-purple-500" />
-                    <span className="text-sm font-medium text-slate-900 dark:text-slate-100">Persistent Storage</span>
-                  </div>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300">
-                    SQLite + SQLAlchemy
-                  </span>
-                </div>
+              {/* Database */}
+              <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-[#fafafa] dark:bg-[#18181b] flex items-center justify-between">
+                <span className="font-medium text-neutral-700 dark:text-neutral-300">Persistence</span>
+                <span className="font-mono text-[11px] text-neutral-500">
+                  SQLite (SQLAlchemy)
+                </span>
               </div>
 
-              {/* Configuration Tip */}
-              <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/60 rounded-xl text-xs text-amber-800 dark:text-amber-300 space-y-1">
-                <div className="flex items-center gap-1.5 font-medium">
-                  <Key className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-                  <span>How to configure Live External APIs:</span>
-                </div>
-                <p className="text-[11px] leading-relaxed text-amber-700 dark:text-amber-400">
-                  Set <code className="bg-amber-100 dark:bg-amber-900/60 px-1 py-0.5 rounded font-mono">GEMINI_API_KEY</code>, <code className="bg-amber-100 dark:bg-amber-900/60 px-1 py-0.5 rounded font-mono">OPENAI_API_KEY</code>, or <code className="bg-amber-100 dark:bg-amber-900/60 px-1 py-0.5 rounded font-mono">TAVILY_API_KEY</code> in <code className="bg-amber-100 dark:bg-amber-900/60 px-1 py-0.5 rounded font-mono">.env</code>. The application automatically falls back to full-featured mock mode if credentials are omitted.
-                </p>
-              </div>
+              {/* Tip */}
+              <p className="text-[11px] text-neutral-400 leading-relaxed">
+                Configure offered models in <code className="font-mono text-neutral-700 dark:text-neutral-300">.env</code>:
+                <br />
+                <code className="text-[10px] text-neutral-500 font-mono block mt-1">
+                  GEMINI_MODEL=gemini-3.5-flash, gemini-3.8-flash
+                </code>
+              </p>
             </>
           ) : (
-            <div className="text-center py-8 text-sm text-slate-500">Loading system status...</div>
+            <div className="text-center py-6 text-neutral-400">Loading status...</div>
           )}
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3 bg-slate-50 dark:bg-slate-800/60 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+        <div className="px-5 py-2.5 bg-[#fafafa] dark:bg-[#18181b] border-t border-neutral-200/80 dark:border-neutral-800/80 flex justify-between items-center text-xs">
           <button
             onClick={onRefresh}
-            className="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium"
+            className="text-neutral-500 hover:text-black dark:hover:text-white transition-colors"
           >
-            Refresh Status
+            Refresh
           </button>
           <button
             onClick={onClose}
-            className="px-4 py-1.5 bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 text-xs font-semibold rounded-lg hover:opacity-90 transition-opacity"
+            className="px-3 py-1 bg-black text-white dark:bg-white dark:text-black rounded-md font-medium text-xs hover:opacity-90 transition-opacity"
           >
             Close
           </button>
@@ -138,4 +117,3 @@ export const SystemStatusModal: React.FC<Props> = ({ isOpen, onClose, status, on
     </div>
   );
 };
-

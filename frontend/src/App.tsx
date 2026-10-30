@@ -190,17 +190,17 @@ export const App: React.FC = () => {
 
   if (isAppLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
-        <div className="flex flex-col items-center gap-3">
-          <Loader2 className="w-8 h-8 animate-spin text-brand-600 dark:text-brand-400" />
-          <p className="text-sm font-medium text-slate-500">Initializing ResearchPilot...</p>
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0f0f10]">
+        <div className="flex flex-col items-center gap-2.5">
+          <Loader2 className="w-5 h-5 animate-spin text-neutral-900 dark:text-white" />
+          <p className="text-xs font-mono text-neutral-400">Loading ResearchPilot...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-[#0f0f10] text-neutral-900 dark:text-neutral-100 flex flex-col font-sans">
       {/* Sidebar Navigation */}
       <Sidebar
         sessions={sessions}
@@ -215,26 +215,28 @@ export const App: React.FC = () => {
       />
 
       {/* Main Content Area */}
-      <div className="lg:pl-72 flex-1 flex flex-col">
+      <div className="lg:pl-64 flex-1 flex flex-col">
         {/* Mobile Header Bar */}
-        <header className="sticky top-0 z-30 lg:hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between">
+        <header className="sticky top-0 z-30 lg:hidden bg-white/90 dark:bg-[#141416]/90 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800 px-4 h-14 flex items-center justify-between">
           <button
             onClick={() => setIsMobileOpen(true)}
-            className="p-1.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
-            aria-label="Open navigation menu"
+            className="p-1.5 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md"
+            aria-label="Open menu"
           >
-            <Menu className="w-6 h-6" />
+            <Menu className="w-5 h-5" />
           </button>
           <div className="flex items-center gap-2">
-            <Compass className="w-5 h-5 text-brand-500" />
-            <span className="font-bold text-slate-900 dark:text-white text-sm">ResearchPilot</span>
+            <Compass className="w-4 h-4 text-black dark:text-white" />
+            <span className="font-semibold text-xs tracking-tight text-neutral-900 dark:text-white">
+              ResearchPilot
+            </span>
           </div>
           <button
             onClick={handleNewResearch}
-            className="p-1.5 text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-950 rounded-lg"
+            className="p-1.5 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md"
             title="Start new research"
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="w-4 h-4" />
           </button>
         </header>
 

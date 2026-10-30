@@ -389,6 +389,9 @@ class MockAIService(BaseAIService):
     Produces comprehensive, deeply structured research plans, analyses, and reports.
     """
 
+    def __init__(self, model_name: str = "mock-model"):
+        self.model_name = model_name
+
     async def generate_plan(
         self, topic: str, instructions: Optional[str], depth: str
     ) -> Dict[str, Any]:
@@ -654,8 +657,12 @@ class MultiModelEnsembleAIService(BaseAIService):
     Gracefully handles rate limits or individual model outages by utilizing remaining models.
     """
 
-    def __init__(self):
-        self.runners: List[Dict[str, Any]] = []
+    def __init__(self, runners: Optional[List[Dict[str, Any]]] = None):
+        if runners is not None:
+            self.runners = runners
+            return
+
+        self.runners = []
 
         # Initialize Gemini models if key is present
         if settings.GEMINI_API_KEY and settings.GEMINI_API_KEY.strip():

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageSquare, Send, Loader2, Sparkles, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Send, Loader2, AlertCircle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { askFollowUp } from '../api/client';
@@ -41,45 +41,38 @@ export const FollowUpPanel: React.FC<Props> = ({ sessionId }) => {
       ]);
       setQuestion('');
     } catch (err: any) {
-      setError(err.message || 'Failed to generate answer for follow-up inquiry.');
+      setError(err.message || 'Failed to generate answer for inquiry.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-5">
-      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
-        <div className="flex items-center gap-2">
-          <div className="p-2 rounded-xl bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400">
-            <MessageSquare className="w-4 h-4" />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-              Grounded Follow-up Inquiry
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Ask deep questions grounded strictly in this report and its retrieved sources.
-            </p>
-          </div>
-        </div>
+    <div className="bg-white dark:bg-[#141416] border border-neutral-200 dark:border-neutral-800 rounded-xl p-5 md:p-6 shadow-xs space-y-4">
+      <div className="border-b border-neutral-200/60 dark:border-neutral-800 pb-3">
+        <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">
+          Follow-up Inquiries
+        </h3>
+        <p className="text-xs text-neutral-500 mt-0.5">
+          Ask questions grounded in this report and its retrieved sources.
+        </p>
       </div>
 
       {/* History */}
       {history.length > 0 && (
-        <div className="space-y-4 max-h-96 overflow-y-auto pr-1">
+        <div className="space-y-3 max-h-96 overflow-y-auto pr-1">
           {history.map((item, idx) => (
             <div
               key={idx}
-              className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 space-y-2.5 text-xs"
+              className="p-3.5 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-[#18181b] space-y-2 text-xs"
             >
-              <div className="flex items-center justify-between text-slate-500">
-                <span className="font-semibold text-slate-800 dark:text-slate-200">
+              <div className="flex items-center justify-between text-neutral-500">
+                <span className="font-semibold text-neutral-900 dark:text-white">
                   Q: {item.question}
                 </span>
-                <span className="text-[10px]">{item.timestamp}</span>
+                <span className="text-[10px] font-mono">{item.timestamp}</span>
               </div>
-              <div className="pt-2 border-t border-slate-200/60 dark:border-slate-700/60 text-slate-700 dark:text-slate-300 markdown-body">
+              <div className="pt-2 border-t border-neutral-200 dark:border-neutral-800 markdown-body">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {item.response.answer}
                 </ReactMarkdown>
@@ -89,30 +82,30 @@ export const FollowUpPanel: React.FC<Props> = ({ sessionId }) => {
         </div>
       )}
 
-      {/* Input Form */}
-      <form onSubmit={handleAsk} className="space-y-3">
+      {/* Input */}
+      <form onSubmit={handleAsk} className="space-y-2">
         <div className="relative">
           <input
             type="text"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             disabled={loading}
-            placeholder="e.g. Which open source model has the lowest memory requirement for a 16GB VRAM GPU?"
-            className="w-full pl-4 pr-12 py-3 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 disabled:opacity-60"
+            placeholder="Ask a clarifying or follow-up question..."
+            className="w-full pl-3.5 pr-10 py-2.5 text-xs bg-neutral-50 dark:bg-[#1a1a1c] border border-neutral-200 dark:border-neutral-800 rounded-lg text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:border-neutral-400 dark:focus:border-neutral-600 disabled:opacity-50 transition-colors"
           />
           <button
             type="submit"
             disabled={loading || !question.trim()}
-            className="absolute right-2 top-2 p-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg disabled:opacity-40 transition-all"
-            title="Submit question"
+            className="absolute right-1.5 top-1.5 p-1.5 bg-black text-white dark:bg-white dark:text-black rounded-md disabled:opacity-30 transition-all"
+            title="Submit"
           >
-            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+            {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
           </button>
         </div>
 
         {error && (
-          <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/60 text-xs text-rose-700 dark:text-rose-300 flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0" />
+          <div className="p-2.5 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 text-xs text-neutral-800 dark:text-neutral-200 flex items-center gap-2">
+            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
             <span>{error}</span>
           </div>
         )}
@@ -120,4 +113,3 @@ export const FollowUpPanel: React.FC<Props> = ({ sessionId }) => {
     </div>
   );
 };
-

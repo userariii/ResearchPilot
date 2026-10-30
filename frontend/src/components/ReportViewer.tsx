@@ -4,15 +4,10 @@ import {
   Copy,
   Check,
   Printer,
-  Sparkles,
-  Calendar,
-  Globe,
-  Layers,
   FileText,
+  Globe,
   MessageSquare,
   ExternalLink,
-  ChevronRight,
-  BookOpen,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -36,7 +31,7 @@ export const ReportViewer: React.FC<Props> = ({ session }) => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy to clipboard', err);
+      console.error('Failed to copy', err);
     }
   };
 
@@ -49,7 +44,7 @@ export const ReportViewer: React.FC<Props> = ({ session }) => {
       const d = new Date(dateStr);
       return d.toLocaleDateString(undefined, {
         year: 'numeric',
-        month: 'long',
+        month: 'short',
         day: 'numeric',
       });
     } catch {
@@ -58,55 +53,45 @@ export const ReportViewer: React.FC<Props> = ({ session }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
-      {/* Header Banner */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 md:p-8 shadow-sm">
+    <div className="max-w-4xl mx-auto px-4 py-10 md:py-14 space-y-6">
+      {/* Editorial Header */}
+      <div className="bg-white dark:bg-[#141416] border border-neutral-200 dark:border-neutral-800 rounded-xl p-6 md:p-8 shadow-xs">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-300">
-                Verified Research Report
-              </span>
-              <span className="text-xs text-slate-400 capitalize flex items-center gap-1">
-                <Layers className="w-3.5 h-3.5" />
-                {session.research_depth} Depth
-              </span>
-              <span className="text-xs text-slate-400 flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5" />
-                {formatDate(session.created_at)}
-              </span>
-              <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
-                <Globe className="w-3.5 h-3.5" />
-                {session.sources.length} Sources Analyzed
-              </span>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-xs font-mono text-neutral-400">
+              <span className="uppercase">{session.research_depth} depth</span>
+              <span>•</span>
+              <span>{formatDate(session.created_at)}</span>
+              <span>•</span>
+              <span>{session.sources.length} sources analyzed</span>
             </div>
 
-            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white leading-tight">
+            <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-neutral-900 dark:text-white leading-tight">
               {session.topic}
             </h1>
 
             {session.instructions && (
-              <p className="text-xs text-slate-600 dark:text-slate-400 italic">
-                Scope & Angle: {session.instructions}
+              <p className="text-xs text-neutral-500 italic">
+                Scope: {session.instructions}
               </p>
             )}
           </div>
 
-          {/* Action buttons */}
-          <div className="flex items-center gap-2 shrink-0 flex-wrap">
+          {/* Action buttons (monochrome) */}
+          <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={handleCopyReport}
-              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-sm"
-              title="Copy markdown report to clipboard"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors"
+              title="Copy markdown to clipboard"
             >
               {copied ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>Copied!</span>
+                  <Check className="w-3.5 h-3.5 text-black dark:text-white" />
+                  <span>Copied</span>
                 </>
               ) : (
                 <>
-                  <Copy className="w-3.5 h-3.5 text-slate-400" />
+                  <Copy className="w-3.5 h-3.5" />
                   <span>Copy</span>
                 </>
               )}
@@ -115,7 +100,7 @@ export const ReportViewer: React.FC<Props> = ({ session }) => {
             <a
               href={getExportUrl(session.id)}
               download
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 hover:opacity-90 transition-opacity shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-lg bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition-opacity"
               title="Download standalone Markdown file"
             >
               <Download className="w-3.5 h-3.5" />
@@ -124,72 +109,69 @@ export const ReportViewer: React.FC<Props> = ({ session }) => {
 
             <button
               onClick={handlePrint}
-              className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-              title="Print or Save as PDF"
+              className="p-1.5 text-neutral-400 hover:text-black dark:hover:text-white rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors"
+              title="Print view"
             >
               <Printer className="w-4 h-4" />
             </button>
           </div>
         </div>
 
-        {/* View Tabs */}
-        <div className="flex items-center gap-2 mt-6 pt-6 border-t border-slate-100 dark:border-slate-800">
+        {/* Minimalist Tabs */}
+        <div className="flex items-center gap-1 mt-6 pt-4 border-t border-neutral-200/60 dark:border-neutral-800">
           <button
             onClick={() => setActiveTab('report')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
               activeTab === 'report'
-                ? 'bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800'
-                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                ? 'bg-neutral-100 dark:bg-neutral-800 text-black dark:text-white'
+                : 'text-neutral-500 hover:text-black dark:hover:text-white'
             }`}
           >
-            <FileText className="w-4 h-4" />
-            <span>Research Report</span>
+            <FileText className="w-3.5 h-3.5" />
+            <span>Report</span>
           </button>
 
           <button
             onClick={() => setActiveTab('sources')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
               activeTab === 'sources'
-                ? 'bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800'
-                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                ? 'bg-neutral-100 dark:bg-neutral-800 text-black dark:text-white'
+                : 'text-neutral-500 hover:text-black dark:hover:text-white'
             }`}
           >
-            <Globe className="w-4 h-4" />
+            <Globe className="w-3.5 h-3.5" />
             <span>Sources ({session.sources.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab('followup')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
               activeTab === 'followup'
-                ? 'bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800'
-                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                ? 'bg-neutral-100 dark:bg-neutral-800 text-black dark:text-white'
+                : 'text-neutral-500 hover:text-black dark:hover:text-white'
             }`}
           >
-            <MessageSquare className="w-4 h-4" />
+            <MessageSquare className="w-3.5 h-3.5" />
             <span>Follow-up Q&A</span>
           </button>
         </div>
       </div>
 
-      {/* Tab 1: Structured Report */}
+      {/* Tab 1: Clean Report Body */}
       {activeTab === 'report' && (
         <div className="space-y-6">
-          {/* Executive Summary Callout (if available) */}
           {session.executive_summary && (
-            <div className="bg-gradient-to-r from-brand-50/70 to-blue-50/40 dark:from-brand-950/40 dark:to-slate-900/40 border border-brand-200/80 dark:border-brand-900/60 rounded-2xl p-6 shadow-sm">
-              <div className="flex items-center gap-2 text-brand-800 dark:text-brand-300 text-xs font-bold uppercase tracking-wider mb-2">
-                <Sparkles className="w-4 h-4 text-brand-500" />
-                <span>Executive Summary Snapshot</span>
-              </div>
-              <p className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed">
+            <div className="bg-[#fafafa] dark:bg-[#141416] border border-neutral-200 dark:border-neutral-800 rounded-xl p-5 md:p-6 shadow-xs">
+              <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-neutral-400 block mb-1.5">
+                Executive Summary
+              </span>
+              <p className="text-sm md:text-[15px] text-neutral-800 dark:text-neutral-200 leading-relaxed">
                 {session.executive_summary}
               </p>
             </div>
           )}
 
-          {/* Full Report Markdown Content */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 md:p-10 shadow-sm print:border-none print:shadow-none print:p-0">
+          <div className="bg-white dark:bg-[#141416] border border-neutral-200 dark:border-neutral-800 rounded-xl p-6 md:p-10 shadow-xs print:border-none print:p-0">
             {session.report ? (
               <div className="markdown-body">
                 <ReactMarkdown
@@ -207,15 +189,15 @@ export const ReportViewer: React.FC<Props> = ({ session }) => {
                 </ReactMarkdown>
               </div>
             ) : (
-              <div className="text-center py-12 text-slate-400">
-                Report content is currently being finalized...
+              <div className="text-center py-12 text-neutral-400 text-sm">
+                Generating report content...
               </div>
             )}
           </div>
         </div>
       )}
 
-      {/* Tab 2: Sources Explorer */}
+      {/* Tab 2: Sources */}
       {activeTab === 'sources' && (
         <SourceExplorer sources={session.sources} />
       )}
@@ -227,4 +209,3 @@ export const ReportViewer: React.FC<Props> = ({ session }) => {
     </div>
   );
 };
-

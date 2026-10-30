@@ -4,17 +4,17 @@
 
 @layer base {
   body {
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
   code, pre {
-    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
   }
 }
 
-/* Custom Scrollbar */
+/* Minimalist Monochrome Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -22,37 +22,41 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.3);
+  background: rgba(160, 160, 160, 0.25);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.5);
+  background: rgba(160, 160, 160, 0.45);
 }
 
-/* Markdown typography styling */
+/* Clean Editorial Markdown Styling */
+.markdown-body {
+  @apply text-neutral-800 dark:text-neutral-200 text-[15px] leading-relaxed;
+}
+
 .markdown-body h1 {
-  @apply text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800;
+  @apply text-2xl md:text-3xl font-semibold tracking-tight text-black dark:text-white mt-8 mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-800;
 }
 
 .markdown-body h2 {
-  @apply text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-7 mb-3 pb-1 border-b border-slate-200/60 dark:border-slate-800/60;
+  @apply text-xl md:text-2xl font-semibold tracking-tight text-black dark:text-white mt-8 mb-3 pb-1 border-b border-neutral-200/60 dark:border-neutral-800;
 }
 
 .markdown-body h3 {
-  @apply text-lg md:text-xl font-semibold text-slate-900 dark:text-slate-100 mt-5 mb-2;
+  @apply text-base md:text-lg font-semibold text-black dark:text-white mt-6 mb-2 tracking-tight;
 }
 
 .markdown-body p {
-  @apply text-slate-700 dark:text-slate-300 leading-relaxed mb-4 text-[15px];
+  @apply text-neutral-700 dark:text-neutral-300 leading-relaxed mb-4 text-[15px];
 }
 
 .markdown-body ul {
-  @apply list-disc list-outside pl-5 mb-4 text-slate-700 dark:text-slate-300 space-y-1.5 text-[15px];
+  @apply list-disc list-outside pl-5 mb-4 text-neutral-700 dark:text-neutral-300 space-y-1.5 text-[15px];
 }
 
 .markdown-body ol {
-  @apply list-decimal list-outside pl-5 mb-4 text-slate-700 dark:text-slate-300 space-y-1.5 text-[15px];
+  @apply list-decimal list-outside pl-5 mb-4 text-neutral-700 dark:text-neutral-300 space-y-1.5 text-[15px];
 }
 
 .markdown-body li {
@@ -60,42 +64,41 @@
 }
 
 .markdown-body blockquote {
-  @apply border-l-4 border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 pl-4 py-2 my-4 rounded-r text-slate-600 dark:text-slate-400 italic text-[14px];
+  @apply border-l-2 border-neutral-900 dark:border-neutral-100 bg-neutral-50 dark:bg-neutral-900/60 pl-4 py-2.5 my-4 rounded-r text-neutral-600 dark:text-neutral-400 italic text-[14px];
 }
 
 .markdown-body table {
-  @apply w-full border-collapse my-6 text-sm overflow-x-auto block md:table;
+  @apply w-full border-collapse my-6 text-sm block md:table overflow-x-auto;
 }
 
 .markdown-body th {
-  @apply bg-slate-100 dark:bg-slate-800/80 text-left font-semibold text-slate-900 dark:text-white p-3 border border-slate-200 dark:border-slate-700 text-xs uppercase tracking-wider;
+  @apply bg-neutral-100 dark:bg-neutral-900 text-left font-semibold text-black dark:text-white p-3 border border-neutral-200 dark:border-neutral-800 text-xs uppercase tracking-wider;
 }
 
 .markdown-body td {
-  @apply p-3 border border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-300;
+  @apply p-3 border border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300;
 }
 
 .markdown-body tr:nth-child(even) {
-  @apply bg-slate-50/60 dark:bg-slate-900/40;
+  @apply bg-neutral-50/60 dark:bg-neutral-900/30;
 }
 
 .markdown-body a {
-  @apply text-brand-600 dark:text-brand-400 hover:underline font-medium break-all;
+  @apply text-black dark:text-white underline underline-offset-4 decoration-neutral-300 dark:decoration-neutral-700 hover:decoration-black dark:hover:decoration-white font-medium transition-colors;
 }
 
 .markdown-body code {
-  @apply bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs px-1.5 py-0.5 rounded font-mono border border-slate-200/80 dark:border-slate-700/80;
+  @apply bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-xs px-1.5 py-0.5 rounded font-mono border border-neutral-200 dark:border-neutral-700;
 }
 
 .markdown-body pre {
-  @apply bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto my-4 text-xs leading-relaxed border border-slate-800;
+  @apply bg-neutral-950 text-neutral-100 p-4 rounded-xl overflow-x-auto my-5 text-xs leading-relaxed border border-neutral-800;
 }
 
 .markdown-body pre code {
-  @apply bg-transparent p-0 border-0 text-slate-100;
+  @apply bg-transparent p-0 border-0 text-neutral-100;
 }
 
 .markdown-body hr {
-  @apply my-8 border-slate-200 dark:border-slate-800;
+  @apply my-8 border-neutral-200 dark:border-neutral-800;
 }
-
