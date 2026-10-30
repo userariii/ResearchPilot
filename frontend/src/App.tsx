@@ -93,10 +93,13 @@ export const App: React.FC = () => {
             return { ...prev, sources: [...prev.sources, event.source!] };
           });
         } else if (event.type === 'completed') {
-          // Re-fetch full session to get entire persisted report and sources
+          // Re-fetch full session and immediately open report view
           getResearch(sessionId).then((full) => {
             setActiveSession(full);
             refreshHistory();
+            if (full.report) {
+              setViewMode('report');
+            }
           });
         } else if (event.type === 'failed') {
           getResearch(sessionId).then((full) => {
